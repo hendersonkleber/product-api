@@ -20,6 +20,8 @@ public record ProductRequest(
         BigDecimal price
 ) {
     public static Product toEntity(ProductRequest request) {
+        if (request == null) return null;
+
         var entity = new Product();
 
         if (request.id() != null && request.id() > 0) {

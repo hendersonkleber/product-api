@@ -10,6 +10,8 @@ public record ProductResponse(
         BigDecimal price
 ) {
     public static ProductResponse fromEntity(Product entity) {
+        if (entity == null) return null;
+
         return new ProductResponse(
                 entity.getId(),
                 entity.getName(),
