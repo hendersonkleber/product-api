@@ -16,11 +16,10 @@ import java.util.List;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
     private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(ResourceAlreadyExistsException.class)
-    public ResponseEntity<ProblemDetail> handleAllResourceAlreadyExistsException(ResourceAlreadyExistsException exception, WebRequest request) {
+    public ResponseEntity<ProblemDetail> handleResourceAlreadyExistsException(ResourceAlreadyExistsException exception, WebRequest request) {
         var status = HttpStatus.CONFLICT;
         var problem = ProblemDetail.forStatus(status);
 
@@ -39,7 +38,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ProblemDetail> handleAllResourceNotFoundException(ResourceNotFoundException exception, WebRequest request) {
+    public ResponseEntity<ProblemDetail> handleResourceNotFoundException(ResourceNotFoundException exception, WebRequest request) {
         var status = HttpStatus.NOT_FOUND;
         var problem = ProblemDetail.forStatus(status);
 
@@ -58,7 +57,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ProblemDetail> handleAllMethodArgumentNotValidException(MethodArgumentNotValidException exception, WebRequest request) {
+    public ResponseEntity<ProblemDetail> handleMethodArgumentNotValidException(MethodArgumentNotValidException exception, WebRequest request) {
         var status = HttpStatus.BAD_REQUEST;
         var problem = ProblemDetail.forStatus(status);
 
@@ -88,7 +87,7 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ProblemDetail> handleAllException(Exception exception, WebRequest request) {
+    public ResponseEntity<ProblemDetail> handleAllExceptions(Exception exception, WebRequest request) {
         var status = HttpStatus.INTERNAL_SERVER_ERROR;
         var problem = ProblemDetail.forStatus(status);
 

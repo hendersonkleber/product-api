@@ -6,12 +6,15 @@ import com.hendersonkleber.product.dto.ProductResponse;
 import com.hendersonkleber.product.exception.ResourceAlreadyExistsException;
 import com.hendersonkleber.product.exception.ResourceNotFoundException;
 import com.hendersonkleber.product.repository.ProductRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ProductService {
+    private final Logger logger = LoggerFactory.getLogger(ProductService.class);
     private final ProductRepository productRepository;
 
     public ProductService(ProductRepository productRepository) {
@@ -31,6 +34,8 @@ public class ProductService {
                 sort
         );
 
+        this.logger.info("Finding products page: {}, limit: {}, sort: {}, order: {}", page, limit, sort, order);
+
         var pageResponse = this.productRepository.findAll(pageRequest);
 
         return new PaginatedResponse<>(
@@ -41,6 +46,8 @@ public class ProductService {
     }
 
     public ProductResponse getById(Long id) {
+        this.logger.info("Finding product by id: {}", id);
+
         var entity = this.productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 
@@ -48,6 +55,8 @@ public class ProductService {
     }
 
     public ProductResponse create(ProductRequest request) {
+        this.logger.info("Creating product with name: {} and price: {}", request.name(), request.price());
+
         if (this.productRepository.existsByName(request.name())) {
             throw new ResourceAlreadyExistsException("Product with this name already exists");
         }
@@ -58,6 +67,8 @@ public class ProductService {
     }
 
     public ProductResponse update(Long id, ProductRequest request) {
+        this.logger.info("Updating product with id: {}, name: {} and price: {}", request.id(), request.name(), request.price());
+
         if (this.productRepository.existsByName(request.name(), id)) {
             throw new ResourceAlreadyExistsException("Product with this name already exists");
         }
@@ -74,6 +85,8 @@ public class ProductService {
     }
 
     public void delete(Long id) {
+        this.logger.info("Deleting product by id: {}", id);
+
         if (!this.productRepository.existsById(id)) {
             throw new ResourceNotFoundException("Product not found");
         }
